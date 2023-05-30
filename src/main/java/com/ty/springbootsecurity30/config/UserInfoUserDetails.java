@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ty.springbootsecurity30.dto.UserInfo;
 
+@SuppressWarnings("serial")
 public class UserInfoUserDetails implements UserDetails {
 	
 	private String name;

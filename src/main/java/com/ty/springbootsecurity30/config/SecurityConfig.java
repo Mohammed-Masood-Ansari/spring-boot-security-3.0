@@ -2,6 +2,8 @@ package com.ty.springbootsecurity30.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,7 +34,7 @@ public class SecurityConfig {
 	 *who is going to use application 
 	 */
 	@Bean
-	public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder){
+	public UserDetailsService userDetailsService(){
 		
 //		/*
 //		 * where passwordEncoder.encode
@@ -65,9 +67,9 @@ public class SecurityConfig {
 		
 		return httpSecurity.csrf().disable()
 				.authorizeHttpRequests()
-				.requestMatchers("/products/welcome").permitAll()
+				.requestMatchers("/products/welcome","/userinfo/saveUserInfo").permitAll()
 				.and()
-				.authorizeHttpRequests().requestMatchers("/products/**")
+				.authorizeHttpRequests().requestMatchers("/products/**","/userinfo/**")
 				.authenticated().and().formLogin().and().build();	
 	}
 	
@@ -78,5 +80,18 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	/*
+	 * authentication provider
+	 */
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService());
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		
+		return authenticationProvider;
 	}
 }

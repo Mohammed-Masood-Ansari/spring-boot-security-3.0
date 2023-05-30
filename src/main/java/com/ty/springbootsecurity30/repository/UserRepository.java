@@ -8,5 +8,5 @@ import com.ty.springbootsecurity30.dto.UserInfo;
 
 public interface UserRepository extends JpaRepository<UserInfo, Integer>{
 
-	Optional<UserInfo> findByName(String userName);
+	public Optional<UserInfo> findByUserName(String userName);
 }
